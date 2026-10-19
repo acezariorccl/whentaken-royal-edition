@@ -24,17 +24,16 @@ Other commands:
 
 The build output is plain HTML and CSS with a small gallery script, so `dist/` can be hosted on any static host.
 
-## Deploy to Cloudflare Pages
+## Deploy to Cloudflare
 
-The site is fully static, so it needs no adapter or Worker. In the Cloudflare dashboard, create a Pages project from this GitHub repository with:
+The site is fully static, so it needs no adapter or server code. It is deployed as a Cloudflare Worker that serves the static files in `dist/` (see `wrangler.json`). The Cloudflare project (Workers Builds, connected to this GitHub repository) should use:
 
-| Setting                | Value           |
-| ---------------------- | --------------- |
-| Framework preset       | Astro           |
-| Build command          | `npm run build` |
-| Build output directory | `dist`          |
+| Setting        | Value               |
+| -------------- | ------------------- |
+| Build command  | `npm run build`     |
+| Deploy command | `npm run deploy`    |
 
-`.node-version` pins Node 22 for the build. Every push to `main` redeploys the site. Commit `package-lock.json` along with `package.json` changes, because Cloudflare installs dependencies from it.
+`npm run deploy` runs Wrangler, which uploads `dist/`. The Worker name in `wrangler.json` must match the project name in Cloudflare. `.node-version` pins Node 22 for the build. Every push to `main` redeploys the site. Commit `package-lock.json` along with `package.json` changes, because Cloudflare installs dependencies from it.
 
 ## Update the scorebook
 
