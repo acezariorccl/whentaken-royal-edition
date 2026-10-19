@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RoundView from '../../components/RoundView.astro';
+import {rounds} from '../../data/game';
+export function getStaticPaths(){return rounds.map(round=>({params:{round:String(round.number)},props:{round}}));}
+const {round}=Astro.props;
+---
+<Layout title={`Round ${round.number}`}><a class="back-link" href="/rounds">← All rounds</a><RoundView round={round}/></Layout>

@@ -1,14 +1,5 @@
 {
-	"name": "whentaken-royal-edition",
-	"compatibility_date": "2025-10-08",
-	"compatibility_flags": ["nodejs_compat"],
-	"main": "./dist/_worker.js/index.js",
-	"assets": {
-		"directory": "./dist",
-		"binding": "ASSETS"
-	},
-	"observability": {
-		"enabled": true
-	},
-	"upload_source_maps": true
+  "name": "whentaken-royal-edition",
+  "compatibility_date": "2026-10-01",
+  "pages_build_output_dir": "./dist"
 }

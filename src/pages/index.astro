@@ -1,50 +1,10 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import Layout from '../layouts/Layout.astro';
+import Avatar from '../components/Avatar.astro';
+import {leaderboard,rounds,playedRounds,formatScore,rankLabel} from '../data/game';
+const hasRounds = playedRounds.length > 0;
+const dash = '–';
 ---
-
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<Layout title="Leaderboard"><section class="page-intro"><div><div class="eyebrow"><span class="little-line"></span> THE BIG PICTURE</div><h1>A few well-traveled minds<span class="accent">.</span></h1><p>{hasRounds ? 'Every guess counts. Here’s how the voyage is adding up.' : 'The crew is assembled. The first voyage is about to begin.'}</p></div><span class="season-label">{playedRounds.length} {playedRounds.length===1?'ROUND':'ROUNDS'} PLAYED</span></section>
+{hasRounds ? <div class="leader-cards">{leaderboard.slice(0,3).map((row,i)=><article class:list={['leader-card',{'champion':i===0}]}><span class="leader-place">{i===0?'✦ THE ONE TO CATCH':`0${i+1} · ON THE PODIUM`}</span><Avatar player={row.player} large/><h2>{row.player.name}</h2><strong>{formatScore(row.total)}<small> total points</small></strong><p>{row.wins} wins · {formatScore(row.average)} average</p></article>)}</div> : <section class="empty-panel"><span class="note-icon">✦</span><div><h2>No rounds played yet</h2><p>Scores will appear here as soon as the first round is complete. Until then, here is the crew.</p></div><a class="button button-outline" href="/rounds">See the current round</a></section>}
+<section class="all-standings"><div class="section-heading"><h2>{hasRounds ? 'The whole crew, on the map' : 'Meet the crew'}</h2><span class="subtle">{hasRounds ? 'Ranked by total points' : `${leaderboard.length} explorers on board`}</span></div><div class="table-scroll"><table class="overall-table"><caption class="sr-only">Overall crew leaderboard</caption><thead><tr><th>RANK</th><th>EXPLORER</th><th>TOTAL POINTS</th><th>ROUNDS</th><th>AVERAGE</th><th>BEST ROUND</th><th>WINS</th></tr></thead><tbody>{leaderboard.map((r,i)=><tr><td>{r.played>0?rankLabel(leaderboard.map(row=>row.total),i):dash}</td><th scope="row"><span class="player-cell"><Avatar player={r.player}/>{r.player.name}</span></th><td><strong>{r.played>0?formatScore(r.total):dash}</strong></td><td>{r.played}</td><td>{r.played>0?formatScore(r.average):dash}</td><td>{r.played>0?formatScore(r.best):dash}</td><td>{r.played>0?r.wins:dash} {r.wins>0&&<span class="accent">✦</span>}</td></tr>)}</tbody></table></div><p class="table-note">The scorebook: location points + year points = total. Totals include every round played; equal totals share a rank.</p></section></Layout>

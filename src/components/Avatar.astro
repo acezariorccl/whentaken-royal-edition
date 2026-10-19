@@ -1,0 +1,6 @@
+---
+import type {Player} from '../data/game';
+interface Props {player:Player; large?:boolean}
+const {player,large=false}=Astro.props;
+---
+<span class:list={['avatar',{large}]} style={`--avatar-color:${player.color}`} aria-hidden="true">{player.initials}</span>

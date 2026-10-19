@@ -1,0 +1,10 @@
+---
+import type {Photo} from '../data/game';
+import PhotoStory from './PhotoStory.astro';
+interface Props {photo:Photo; index?:number}
+const {photo,index}=Astro.props;
+// Photos without a region are not in the gallery yet, so they do not link there.
+const Tag = photo.region ? 'a' : 'div';
+const linkProps = photo.region ? {href:`/gallery#${photo.id}`, 'aria-label':`Explore ${photo.country}`} : {};
+---
+<article class="photo-card"><Tag {...linkProps}><div class="photo-image"><img src={photo.image} alt={photo.alt} loading="lazy" width="600" height="450"/>{index!==undefined&&<span class="photo-number">0{index+1}</span>}{photo.year&&<span class="photo-year">{photo.year}</span>}</div><h3>{photo.country}</h3><p>{photo.title}</p></Tag><PhotoStory photo={photo}/></article>

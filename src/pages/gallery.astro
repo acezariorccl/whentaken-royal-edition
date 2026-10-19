@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {galleryRegions} from '../data/game';
+import Icon from '../components/Icon.astro';
+import PhotoStory from '../components/PhotoStory.astro';
+import {allPhotos} from '../data/photos';
+const galleryPhotos = allPhotos.filter(photo => photo.region);
+const hasPhotos = galleryPhotos.length > 0;
+const initialRegion = galleryRegions.find(region => galleryPhotos.some(photo => photo.region === region)) ?? galleryRegions[0];
+const initialCount = galleryPhotos.filter(photo => photo.region === initialRegion).length;
+---
+<Layout title="Destination gallery"><section class="page-intro"><div><div class="eyebrow"><span class="little-line"></span> POSTCARDS FROM OUR GUESSES</div><h1>The world is quite a looker<span class="accent">.</span></h1><p>{hasPhotos ? 'The ports of call that stopped us scrolling. And started us guessing.' : 'Our first postcards are on their way.'}</p></div></section>
+{!hasPhotos && <section class="empty-panel"><span class="note-icon">✦</span><div><h2>The gallery is empty</h2><p>Destinations and stories will appear here after the first round is complete.</p></div><a class="button button-outline" href="/">Back to the leaderboard<Icon size={17}/></a></section>}
+{hasPhotos && <><div class="gallery-controls"><div class="filter-group" role="group" aria-label="Filter destinations">{galleryRegions.map((region)=><button class:list={['filter',{active:region===initialRegion}]} data-filter={region} aria-pressed={region===initialRegion?'true':'false'}>{region}<span>{galleryPhotos.filter(photo=>photo.region===region).length}</span></button>)}</div><span class="subtle" id="photo-count" aria-live="polite">{initialCount} {initialCount===1?'place':'places'} to get lost in</span></div><div class="gallery-grid">{galleryPhotos.map(photo=><article class="gallery-item" id={photo.id} data-region={photo.region} hidden={photo.region!==initialRegion}><button class="gallery-open" data-image={photo.image} data-title={photo.country} data-alt={photo.alt} aria-label={`Enlarge picture of ${photo.country}`}><img src={photo.image} alt={photo.alt} width="800" height="600" loading="lazy"/><span class="expand-icon">↗</span>{photo.year&&<span class="photo-year">{photo.year}</span>}</button><div class="gallery-caption"><h2><Icon name="pin" size={17}/>{photo.country}</h2><p>{photo.title}</p></div><PhotoStory photo={photo}/></article>)}</div><p class="gallery-empty" id="gallery-empty" hidden>No destinations from this region yet. The next voyage awaits.</p><p class="table-note">Reveal each story after you’ve made your guess.</p><dialog id="photo-dialog" aria-labelledby="dialog-title"><button class="dialog-close" aria-label="Close picture">✕</button><img id="dialog-image" src="" alt=""/><p id="dialog-title"></p></dialog></>}<script>
+const filters=document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+function selectRegion(region: string) {
+ filters.forEach(button=>{const selected=button.dataset.filter===region;button.classList.toggle('active',selected);button.setAttribute('aria-pressed',String(selected));});
+ let count=0;
+ document.querySelectorAll<HTMLElement>('.gallery-item').forEach(item=>{item.hidden=item.dataset.region!==region;if(!item.hidden)count++;});
+ document.querySelector<HTMLElement>('#gallery-empty')!.hidden=count>0;
+ document.querySelector('#photo-count')!.textContent=`${count} ${count===1?'place':'places'} to get lost in`;
+}
+const dialog=document.querySelector<HTMLDialogElement>('#photo-dialog');
+if(dialog){
+ filters.forEach(button=>button.addEventListener('click',()=>selectRegion(button.dataset.filter!)));
+ const revealLinkedPhoto=()=>{
+  const id=window.location.hash.slice(1);
+  const item=id?document.getElementById(id):null;
+  if(item?.matches('.gallery-item') && item.dataset.region){selectRegion(item.dataset.region);item.scrollIntoView({block:'start'});}
+ };
+ revealLinkedPhoto();
+ window.addEventListener('hashchange',revealLinkedPhoto);
+ document.querySelectorAll<HTMLButtonElement>('.gallery-open').forEach(button=>button.addEventListener('click',()=>{const image=document.querySelector<HTMLImageElement>('#dialog-image')!;image.src=button.dataset.image!;image.alt=button.dataset.alt!;document.querySelector('#dialog-title')!.textContent=button.dataset.title!;dialog.showModal();}));
+ document.querySelector('.dialog-close')!.addEventListener('click',()=>dialog.close());
+ dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
+}
+</script></Layout>

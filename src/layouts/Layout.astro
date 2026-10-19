@@ -1,0 +1,12 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+interface Props {title?:string}
+const {title='Leaderboard'}=Astro.props;
+const path=Astro.url.pathname;
+const links=[['/','Leaderboard'],['/rounds','Past rounds'],['/gallery','Destination gallery']];
+---
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={site.description}/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"/><link rel="icon" href="/favicon.svg"/><title>{title} · {site.name}</title></head>
+<body><a class="skip-link" href="#main">Skip to content</a><header class="site-header"><div class="header-inner"><a class="brand" href="/" aria-label={`${site.name} home`}><span class="brand-icon"><Icon name="anchor" size={26}/></span><span>voyage<span class="brand-accent">guess</span><small>{site.edition}</small></span></a><nav aria-label="Main navigation">{links.map(([href,label])=><a href={href} class:list={{active:href==='/'?path==='/':path.startsWith(href)}} aria-current={(href==='/'?path==='/':path.startsWith(href))?'page':undefined}>{label}</a>)}</nav><span class="header-note"><span class="status-dot"></span>Smooth seas, friendly rivalry.</span></div></header>
+<main id="main"><slot/></main><footer><a class="footer-brand" href="/"><Icon name="anchor" size={19}/> Same crew. A whole world to explore.</a><span>Made for the fun of the guess. <span class="footer-star">✦</span></span><small>Crew results · Destinations and stories shared by our shipmates</small></footer></body></html>

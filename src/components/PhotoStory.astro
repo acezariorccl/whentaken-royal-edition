@@ -1,0 +1,14 @@
+---
+import type { Photo } from '../data/photos';
+interface Props { photo: Photo }
+const { photo } = Astro.props;
+const credit = photo.credit.kind === 'anonymous' ? 'Anonymous' : photo.credit.name;
+---
+{photo.story && <details class="photo-story">
+  <summary>Reveal the story</summary>
+  <div class="story-content">
+    <p class="story-credit">Shared by {credit}</p>
+    <blockquote>{photo.story.split('\n\n').map(paragraph => <p>{paragraph}</p>)}</blockquote>
+    {photo.mapUrl && <a class="text-link" href={photo.mapUrl}>View this place on the map ↗</a>}
+  </div>
+</details>}

@@ -1,0 +1,6 @@
+---
+interface Props { name?: string; size?: number }
+const { name='arrow', size=20 }=Astro.props;
+const paths:Record<string,string>={arrow:'M5 12h14m-5-5 5 5-5 5',anchor:'M15 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM12 22V8M5 12H2a10 10 0 0 0 20 0h-3',globe:'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18Z',pin:'M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0ZM15 10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z',calendar:'M4 5h16v16H4ZM8 3v4m8-4v4M4 10h16',photo:'M3 4h18v16H3Zm0 12 6-6 5 5 3-3 4 4M16 8h.01',trophy:'M8 3h8v7a4 4 0 0 1-8 0V3Zm0 2H4v3a4 4 0 0 0 4 4m8-7h4v3a4 4 0 0 1-4 4m-4 2v6m-4 0h8',people:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m14-17a4 4 0 0 1 0 8m6 9v-2a4 4 0 0 0-3-4M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z',chevron:'m9 5 7 7-7 7'};
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={paths[name] || paths.arrow}/></svg>
