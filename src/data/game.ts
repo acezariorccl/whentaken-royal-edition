@@ -53,7 +53,22 @@ const round1: Round = {
     { playerId: "fede", location: 321, year: 490, score: 811 },
   ],
 };
-export const rounds: Round[] = [round1];
+// Round 2 photos come from src/assets/rounds/round-2/.
+const round2: Round = {
+  number: 2,
+  title: "Round 2",
+  description: "Sebas takes the top spot with 906 points.",
+  photos: photosByRound[2] ?? [],
+  results: [
+    { playerId: "sebas", location: 417, year: 489, score: 906 },
+    { playerId: "walman", location: 398, year: 486, score: 884 },
+    { playerId: "fede", location: 291, year: 488, score: 779 },
+    { playerId: "kevin", location: 235, year: 490, score: 725 },
+    { playerId: "andre", location: 191, year: 488, score: 679 },
+    { playerId: "luisa", location: 197, year: 478, score: 675 },
+  ],
+};
+export const rounds: Round[] = [round2, round1];
 // Rounds that already have results.
 export const playedRounds = rounds.filter((round) => round.results.length > 0);
 

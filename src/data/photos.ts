@@ -56,7 +56,9 @@ export const photoSources: PhotoSource[] = [];
 for (const entry of entries) {
   const list = (photosByRound[entry.round] ??= []);
   const number = list.length + 1;
-  const details = photoDetails[`${entry.round}/${entry.file}`];
+  const details =
+    photoDetails[`${entry.round}/${entry.file}`] ??
+    photoDetails[`${entry.round}/${entry.file.replace(/\.[^.]+$/, "")}`];
   const creditName = details?.credit?.kind === "named" ? details.credit.name : undefined;
   photoSources.push({ ...entry, number });
   list.push({
