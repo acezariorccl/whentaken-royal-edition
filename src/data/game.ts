@@ -64,6 +64,7 @@ const round2: Round = {
     { playerId: "walman", location: 398, year: 486, score: 884 },
     { playerId: "fede", location: 291, year: 488, score: 779 },
     { playerId: "kevin", location: 235, year: 490, score: 725 },
+    { playerId: "victor", location: 203, year: 487, score: 690 },
     { playerId: "andre", location: 191, year: 488, score: 679 },
     { playerId: "luisa", location: 197, year: 478, score: 675 },
   ],
